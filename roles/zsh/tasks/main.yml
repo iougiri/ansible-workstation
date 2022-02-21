@@ -1,0 +1,26 @@
+- name: install ZSH
+  tags: zsh
+  become: yes
+  package:
+    name: zsh
+    state: present
+
+- name: clone powerlevel10k repo (non-root user)
+  tags: zsh, powerlevel10k
+  become: yes
+  become_user: "{{ username }}"
+  git:
+    repo: "https://github.com/romkatv/powerlevel10k.git"
+    dest: "/home/{{ username }}/.powerlevel10k"
+    depth: 1
+    update: no
+
+- name: clone powerlevel10k repo (root user)
+  tags: zsh, powerlevel10k
+  become: yes
+  git:
+    repo: "https://github.com/romkatv/powerlevel10k.git"
+    dest: "/root/.powerlevel10k"
+    depth: 1
+    update: no
+
