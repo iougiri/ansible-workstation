@@ -1,0 +1,12 @@
+- name: create user account
+  tags: users
+  become: yes
+  user:
+    name: "{{ username }}"
+    uid: "{{ uid }}"
+    shell: /bin/zsh
+    groups: 
+      - docker
+    append: yes
+    update_password: on_create
+

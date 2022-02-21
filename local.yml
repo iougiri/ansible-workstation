@@ -4,6 +4,10 @@
   become: true
 
 - hosts: localhost
+  vars:
+    username: "iougiri"
+    uid: 1000
   roles:
     - base
+    - users
 
