@@ -1,0 +1,21 @@
+- name: install Golang
+  tags: programming, go
+  become: yes
+  package:
+    update_cache: yes
+    name:
+      - golang
+
+- name: install Go packages
+  tags: go, packages
+  become: yes
+  environment:
+    GOPATH: "/usr/local/go"
+  command: go install "{{ item.url }}"
+  args:
+    creates: "/usr/local/go/{{ item.binary }}"
+  loop:
+    - { url: "github.com/tomnomnom/anew@latest", binary: "anew" }
+  loop_control:
+    label: "{{ item.url }}"
+
