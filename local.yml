@@ -1,0 +1,9 @@
+---
+
+- hosts: localhost
+  become: true
+
+- hosts: localhost
+  roles:
+    - base
+

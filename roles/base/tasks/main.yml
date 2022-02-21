@@ -1,0 +1,88 @@
+- name: update package cache (Debian)
+  tags: init, basic
+  become: yes
+  apt:
+    update_cache: yes
+  when: ansible_os_family == 'Debian'
+  
+- name: install dnf-plugins-core to manage DNF repository
+  tags: init, basic
+  become: yes
+  dnf:
+    name:  dnf-plugins-core
+    state: present
+  when: ansible_distribution == 'Fedora'
+
+- name: install rpm fusion repo 
+  tags: init, basic
+  become: yes
+  dnf:
+    name: 
+        - 'https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-{{ansible_distribution_major_version}}.noarch.rpm'
+        - 'https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-{{ansible_distribution_major_version}}.noarch.rpm'
+    state: present
+  when: ansible_distribution == 'Fedora'
+
+- name: install docker repo (Fedora)
+  tags: init, basic
+  become: yes
+  shell:  'dnf config-manager --add-repo https://download.docker.com/linux/fedora/docker-ce.repo'
+  args:
+    creates: '/etc/yum.repos.d/docker-ce.repo'
+  when: ansible_distribution == 'Fedora'
+
+- name: update package cache (Fedora)
+  tags: init, basic
+  become: yes
+  dnf:
+    update_cache: yes
+  when: ansible_distribution == 'Fedora'
+
+- name: install basic packages
+  tags: init, basic
+  become: yes
+  package:
+    name:
+      - curl
+      - ftp
+      - gcc
+      - git
+      - grep
+      - htop
+      - jq
+      - openvpn
+      - ripgrep
+      - rsync
+      - socat
+      - tar
+      - tmux
+      - traceroute
+      - unzip
+      - wget
+      - xsel
+    state: latest
+
+- name: install basic packages (Fedora)
+  tags: init, basic
+  become: yes
+  dnf:
+    name:
+      - docker-ce
+      - nmap-ncat
+      - openssh-clients
+      - vim-enhanced
+  when: ansible_distribution == 'Fedora'
+
+- name: install basic packages (Debian)
+  tags: init, basic
+  become: yes
+  apt:
+    name:
+      - apt-transport-https
+      - build-essential
+      - docker.io
+      - mariadb-client
+      - ncat
+      - openssh-client
+      - vim
+  when: ansible_os_family == 'Debian'
