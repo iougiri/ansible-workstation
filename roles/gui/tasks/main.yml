@@ -1,0 +1,43 @@
+- name: update package cache (Debian)
+  tags: init, gui
+  become: yes
+  apt:
+    update_cache: yes
+  when: ansible_os_family == 'Debian'
+  
+- name: update package cache (Fedora)
+  tags: init, gui
+  become: yes
+  dnf:
+    update_cache: yes
+  when: ansible_distribution == 'Fedora'
+
+- name: install GUI packages
+  tags: init, gui
+  become: yes
+  package:
+    name:
+      - darktable
+      - gimp
+      - inkscape
+      - libreoffice
+      - remmina
+    state: latest
+
+- name: install GUI packages (Fedora)
+  tags: init, gui
+  become: yes
+  dnf:
+    name:
+      - firefox
+      - gmic-gimp
+  when: ansible_distribution == 'Fedora'
+
+- name: install GUI packages (Debian)
+  tags: init, gui
+  become: yes
+  apt:
+    name:
+      - firefox-esr
+      - gimp-gmic
+  when: ansible_os_family == 'Debian'
